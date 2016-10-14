@@ -1,0 +1,16 @@
+{application, simulate,
+ [{description, "An OTP application"},
+  {vsn, "0.1.0"},
+  {registered, [simulate_sup]},
+  {mod, { simulate_app, []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, []},
+  {links, []}
+ ]}.
