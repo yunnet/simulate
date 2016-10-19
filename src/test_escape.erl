@@ -16,7 +16,7 @@ run(T)->
   statistics(runtime),
   A = "7E0200001C01318000099900080000000000000003019410A106694C1300640028001E1610190953487D027E",
   B = to_bin(A),
-  run(T, 10000, B).
+  run(T, 10, B).
 
 run(T, 0, _)->
   {_, Time} = statistics(runtime),
