@@ -26,9 +26,8 @@ encode(MsgId, CommNo, DataBody, CmdSeq)->
   B = eca_utils:to_bin(A),
   C = eca_utils:checksum(B),
   D = <<B/bitstring, C:8>>,
-  E = binary:replace(D, <<16#7E>>, <<16#7D, 16#02>>, [global]),
-  F = binary:replace(E, <<16#7D>>, <<16#7D, 16#01>>, [global]),
-  H = <<16#7E, F/bitstring, 16#7E>>,
+  E = eca_utils:escape808(D),
+  H = <<16#7E, E/bitstring, 16#7E>>,
   H.
 
 decode(Package)->

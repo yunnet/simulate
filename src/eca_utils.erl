@@ -8,18 +8,31 @@
 %%%-------------------------------------------------------------------
 -module(eca_utils).
 
--export([checksum/1]).
--export([getChannal_keys/1]).
--export([md5/1]).
--export([to_bin/1]).
--export([to_hex/1]).
--export([to_hex_upper/1]).
+-compile(export_all).
 
--export([binary_search/2]).
--export([sys_info/0]).
+%%808转义 7E -> 7E02, 7D -> 7D01
+escape808(X) ->
+  escape808(X, <<>>).
+escape808(<<126, T/binary>>, Acc) ->
+  escape808(T, <<Acc/binary, 125, 2>>);   %%7E -> 7D02    126 -> 125, 2
+escape808(<<125, T/binary>>, Acc) ->
+  escape808(T, <<Acc/binary, 125, 1>>);   %%7D -> 7D01    125 -> 125, 1
+escape808(<<H, T/binary>>, Acc) ->
+  escape808(T, <<Acc/binary, H>>);      %%Other
+escape808(<<>>, Acc) ->
+  Acc.
 
--export([now2utc/0]).
--export([time2GB/1, time2utc/1, datetime2utc/1]).
+%%808反转义 7D02 -> 7E 7D01 -> 7D
+unEscape808(X) ->
+  unEscape808(X, <<>>).
+unEscape808(<<125, 1, T/binary>>, Acc) ->
+  unEscape808(T, <<Acc/binary, 125>>);      %%7D01 -> 7D     125, 1 -> 125
+unEscape808(<<125, 2, T/binary>>, Acc) ->
+  unEscape808(T, <<Acc/binary, 126>>);      %%7D02 -> 7E     125, 2 -> 126
+unEscape808(<<H, T/binary>>, Acc) ->        %%Other
+  unEscape808(T, <<Acc/binary, H>>);
+unEscape808(<<>>, Acc) ->
+  Acc.
 
 %%累计和
 checksum(X) when is_binary(X)->
